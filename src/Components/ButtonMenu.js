@@ -1,10 +1,10 @@
 import React from 'react';
 
 
-const ButtonMenu=({producto})=>{
+const ButtonMenu=(props)=>{
 
     return (
-    <button type="button" className="btn btn-primary mg">{producto.TipoMenu}</button>
+    <button type="button" className="btn btn-primary mg" onClick={()=>props.CargaProductos(props.idprod)}>{props.producto}</button>
     )
 }
 

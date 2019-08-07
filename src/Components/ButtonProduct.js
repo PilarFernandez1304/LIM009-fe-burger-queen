@@ -1,9 +1,23 @@
 // @flow
 import React from 'react';
 
-const ButtonProduct=({Nombre})=>{
+const ButtonProduct=(props)=>{
+
     return(
-        <button type="button" className="btn btn-secondary mg">{Nombre.Producto}</button>
+        <div>
+            {
+                props.Producto.map((prod,index)=>(
+                  <button type="button" key={index} className="btn btn-secondary mg">{prod.Producto}</button>  
+                ))
+            }
+        
+               
+                    
+        
+            
+            
+        </div>
+      
     )
 }
 

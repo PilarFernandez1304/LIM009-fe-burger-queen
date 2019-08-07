@@ -1,75 +1,83 @@
-import React, {Component} from 'react';
-import './bootstrap.min.css';
-import './App.css'
-import firebase from 'firebase';
-import firebaseConfig from './config/configFirebase'
-import 'firebase/firestore';
-import Header from './Components/Header';
-import ButtonMenu from './Components/ButtonMenu'
-import ButtonProduct from './Components/ButtonProduct'
+import React, { Component } from "react";
+import "./bootstrap.min.css";
+import "./App.css";
+import db from "./config/configFirebase";
+import Header from "./Components/Header";
+import ButtonMenu from "./Components/ButtonMenu";
+import TabPedido from "./Components/TabPedido";
+import ButtonProduct from "./Components/ButtonProduct"
 
-
-class App extends Component{ 
-  
-
-  constructor(props){
+class App extends Component {
+  constructor(props) {
     super(props);
-    // dbConnection
-    this.app=firebase.initializeApp(firebaseConfig);
-    //this db=this.app.firestore()
-    this.state={
-      productos:
-      [
-        { idProducto:'1',
-          Producto:'Jugo Natural',
-          Precio:5,
-          TipoMenu: 'Desayuno'
-        },
-        {
-          idProducto:'2',
-          Producto:'Hamburguesa',
-          Precio:5,
-          TipoMenu: 'Almuerzo'
-        }
-      ]
-    }
+     this.state = {
+      Menu: [],
+      Productos:[]
+    };
+    this.CargaProductos=this.CargaProductos.bind(this);
+  }
 
+  componentDidMount() {
+    db.collection("Menu")
+      .get()
+      .then(querySnapshot => {
+        this.setState({
+          Menu:querySnapshot.docs.map(
+            doc => {
+             return {
+                idMenu:doc.id,
+                TipoMenu: doc.data().TipoMenu
+              }
+            })
+        })
+    });
+    
+    
+  }
+
+  //llenar productos
+
+  CargaProductos(id) {
+    let productos = db.collection("Productos");
+
+    var query = productos.where("IdMenu", "==",id)
+    query.get().then( (querySnapshot) =>{
+      this.setState({
+        Productos:querySnapshot.docs.map(
+          doc => {
+           return {
+              idProducto:doc.id,
+              IdMenu:doc.data().IdMenu,
+              Producto:doc.data().NomProducto
+
+            }
+          })
+      })
+  })
   }
   
-      
-  render(){
-    const{productos}=this.state
-    return (      
-        <div>
-          <Header></Header>
-          <div className="jumbotron container">
-          <h1 className="display-3">Pedidos!</h1>
-            {
-              productos.map(prod=>(
-                
-                <ButtonMenu 
-                key={prod.idProducto}
-                producto={prod}></ButtonMenu>
-              ))
-            }
-            <hr></hr>
-            {
-              productos.map(prod=>(
-                
-                <ButtonProduct
-                key={prod.idProducto}
-                Nombre={prod}></ButtonProduct>
-              ))
-            }
-           
-      
-        </div>
-          
-          
-        </div>
-    );
+  render() {
+    const { Menu } = this.state;
 
-  }  
+    return (
+      <div>
+        <Header />
+        <div className="jumbotron container">
+         
+          {
+            Menu.map(prod => (            
+            <ButtonMenu key={prod.idMenu} idprod={prod.idMenu} producto={prod.TipoMenu} CargaProductos={this.CargaProductos} />
+          ))
+          }
+          <hr />
+          <ButtonProduct  Producto={this.state.Productos}/>
+          <hr />
+            <TabPedido></TabPedido>
+        </div>
+           
+      </div>
+    );
+  }
 }
 
 export default App;
