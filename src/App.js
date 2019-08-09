@@ -12,9 +12,19 @@ class App extends Component {
     super(props);
      this.state = {
       Menu: [],
-      Productos:[]
+      Productos:[],
+      Pedidos:{
+        Cliente:'',
+        Mesa:'',
+        Date:'',
+        Order:[]
+
+      }
     };
+
     this.CargaProductos=this.CargaProductos.bind(this);
+    this.CargarPedidos=this.CargarPedidos.bind(this);
+    this.addProduct=this.addProduct.bind(this);
   }
 
   componentDidMount() {
@@ -30,16 +40,13 @@ class App extends Component {
               }
             })
         })
-    });
-    
-    
+    });  
   }
 
   //llenar productos
 
   CargaProductos(id) {
     let productos = db.collection("Productos");
-
     var query = productos.where("IdMenu", "==",id)
     query.get().then( (querySnapshot) =>{
       this.setState({
@@ -48,7 +55,8 @@ class App extends Component {
            return {
               idProducto:doc.id,
               IdMenu:doc.data().IdMenu,
-              Producto:doc.data().NomProducto
+              Producto:doc.data().NomProducto,
+              Precio:doc.data().Precio
 
             }
           })
@@ -56,9 +64,30 @@ class App extends Component {
   })
   }
   
+
+  addProduct(id,producto,precio){
+    
+  }
+
+  // Llenar Tabla de Pedidos
+
+  CargarPedidos(id,producto,precio){
+    
+    this.setState({
+      Pedidos:{
+        producto:`${producto}`,
+        Precio:precio
+      }
+    })
+  
+
+  
+     
+  }
+  
   render() {
     const { Menu } = this.state;
-
+    
     return (
       <div>
         <Header />
@@ -70,9 +99,13 @@ class App extends Component {
           ))
           }
           <hr />
-          <ButtonProduct  Producto={this.state.Productos}/>
-          <hr />
-            <TabPedido></TabPedido>
+          <div className="containerMenu">
+          <ButtonProduct key={this.state.Productos.idProducto} Producto={this.state.Productos} addProduct={this.addProduct}/>
+
+          <TabPedido></TabPedido>
+          </div>
+
+            
         </div>
            
       </div>
