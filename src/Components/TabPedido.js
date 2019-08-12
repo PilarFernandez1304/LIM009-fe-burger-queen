@@ -12,8 +12,8 @@ const TabPedido=(props)=>{
   </thead>
   <tbody>
     {
-      props.fillOrder.map((res)=>(
-        <tr className="table-primary">
+      props.fillOrder.map((res,index)=>(
+        <tr key={index}className="table-primary">
       <th scope="row">{res.Producto}</th>
       <td>{res.Precio}</td>
      

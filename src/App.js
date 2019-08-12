@@ -116,7 +116,7 @@ class App extends Component {
           <div className="containerMenu">
           <ButtonProduct key={this.state.Productos.idProducto} Producto={this.state.Productos} addProduct={this.addProduct}/>
 
-          <TabPedido fillOrder={this.state.Pedidos.Order}></TabPedido>
+          <TabPedido key={this.state.Pedidos} fillOrder={this.state.Pedidos.Order}></TabPedido>
           </div>
 
             
