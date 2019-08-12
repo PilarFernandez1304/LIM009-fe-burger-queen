@@ -6,17 +6,20 @@ const TabPedido=(props)=>{
           
   <thead>    
     <tr className="table-active">
+      <th scope="col">Cant</th>
       <th scope="col">Productos</th>
       <th scope="col">Precios</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     {
       props.fillOrder.map((res,index)=>(
-        <tr key={index}className="table-primary">
+      <tr key={index}className="table-primary">
+      <td>{index+1}</td>
       <th scope="row">{res.Producto}</th>
       <td>{res.Precio}</td>
-     
+      <th scope="row">X</th>
     </tr>
       ))
     }    
