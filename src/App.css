@@ -23,3 +23,9 @@
   display: flex;
   justify-content:flex-end;
 }
+.orderForm{
+  width: 60%;
+  height: 250px;
+  
+  
+}

@@ -5,7 +5,8 @@ import db from "./config/configFirebase";
 import Header from "./Components/Header";
 import ButtonMenu from "./Components/ButtonMenu";
 import TabPedido from "./Components/TabPedido";
-import ButtonProduct from "./Components/ButtonProduct"
+import ButtonProduct from "./Components/ButtonProduct";
+import NewOrder from "./Components/NewOrder"
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +25,9 @@ class App extends Component {
 
     this.CargaProductos=this.CargaProductos.bind(this);
     this.CargarPedidos=this.CargarPedidos.bind(this);
+    this.createPedido=this.createPedido.bind(this);
     this.addProduct=this.addProduct.bind(this);
+
   }
 
   componentDidMount() {
@@ -64,25 +67,35 @@ class App extends Component {
   })
   }
   
+  createPedido(event){
+    this.setState({
+          Pedidos:{
+          ...this.state.Pedidos,
+            [event.target.name] : event.target.value,
+          }        
+    })  
+  }
 
   addProduct(id,producto,precio){
-    
+    let ordenes=this.state.Pedidos.Order;
+    let Cliente=this.state.Pedidos.Cliente;
+    let Mesa=this.state.Pedidos.Mesa;
+
+    ordenes.push({ID:id,Producto:producto,Precio:precio})
+
+    this.setState({
+      Pedidos:{
+        Cliente,
+        Mesa,
+        Date:'',
+        Order:ordenes
+      }
+    })  
   }
 
   // Llenar Tabla de Pedidos
 
-  CargarPedidos(id,producto,precio){
-    
-    this.setState({
-      Pedidos:{
-        producto:`${producto}`,
-        Precio:precio
-      }
-    })
-  
-
-  
-     
+  CargarPedidos(){
   }
   
   render() {
@@ -92,17 +105,18 @@ class App extends Component {
       <div>
         <Header />
         <div className="jumbotron container">
+          <NewOrder valueCliente={this.state.Pedidos.Cliente} valueTable={this.state.Pedidos.Table} createPedido={this.createPedido}></NewOrder>
          
-          {
+          <hr />
+           {
             Menu.map(prod => (            
             <ButtonMenu key={prod.idMenu} idprod={prod.idMenu} producto={prod.TipoMenu} CargaProductos={this.CargaProductos} />
           ))
           }
-          <hr />
           <div className="containerMenu">
           <ButtonProduct key={this.state.Productos.idProducto} Producto={this.state.Productos} addProduct={this.addProduct}/>
 
-          <TabPedido></TabPedido>
+          <TabPedido fillOrder={this.state.Pedidos.Order}></TabPedido>
           </div>
 
             
