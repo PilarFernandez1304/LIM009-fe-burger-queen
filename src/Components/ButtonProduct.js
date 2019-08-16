@@ -6,7 +6,7 @@ const ButtonProduct=(props)=>{
         <div className="containerProduct">
             {
                 props.Producto.map((prod)=>(
-                  <button type="button" key={prod.idProducto} className="btn btn-secondary mg" onClick={()=>props.addProduct(prod.idProducto,prod.Producto,prod.Precio)}>{prod.Producto}</button>  
+                  <button type="button" key={prod.idProducto} className="btn btn-secondary mg" onClick={()=>{props.addProduct(prod.idProducto,prod.Producto,prod.Precio)}}>{prod.Producto}</button>  
                 ))
             }            
         </div>
